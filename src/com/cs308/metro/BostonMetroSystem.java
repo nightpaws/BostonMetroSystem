@@ -38,8 +38,9 @@ public class BostonMetroSystem {
 
 				sourceNode = multiGraph.getNodeFromStationName(source);
 				// StPauls Handling
+				if(source.equalsIgnoreCase("St.PaulStreet")){
 				sourceNode = stPaulsDuplicate(sourceNode);
-				
+				}
 				
 				// Get the second station name
 				System.out.println("Please enter your destination station:\n");
@@ -60,8 +61,9 @@ public class BostonMetroSystem {
 							.getNodeFromStationName(destination);
 
 					// StPauls Handling
+					if(destination.equalsIgnoreCase("St.PaulStreet")){
 					destinationNode = stPaulsDuplicate(destinationNode);
-
+					}
 					route = multiGraph.findRoute(sourceNode, destinationNode);
 					if (route != null) {
 						for (int i = 0; i < route.size(); i++) {
