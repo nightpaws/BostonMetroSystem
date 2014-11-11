@@ -20,18 +20,18 @@ public class MultiGraph implements GraphADT {
 	@Override
 	public void addNode(Node n) {
 		nodes.add(n);
-
 	}
 
 	@Override
 	/*
-	 * Method to find the shortest possible route between two nodes in
-	 * the graph using the Breadth-First Search Algorithm.
-	 * Returns: ArrayList of Nodes in order which they should be traversed
-	 * in order to reach destination.
+	 * Method to find the shortest possible route between two nodes in the graph
+	 * using the Breadth-First Search Algorithm. Returns: ArrayList of Nodes in
+	 * order which they should be traversed in order to reach destination.
 	 */
 	public ArrayList<Node> findRoute(Node sourceNode, Node destinationNode) {
 		// if start = end. stop. return null
+
+		// "Source Station matches destination station";
 		if (sourceNode.getNodeID() == destinationNode.getNodeID()) {
 			System.out
 					.println("Error: Source station identical to destination station");
@@ -40,7 +40,7 @@ public class MultiGraph implements GraphADT {
 
 		// To store directions to show the user
 		ArrayList<Node> directionOutput = new ArrayList<Node>();
-		Queue<Node> unvisited = new LinkedList<Node>(); 
+		Queue<Node> unvisited = new LinkedList<Node>();
 		// route holds a node and the previous node connected to it
 		HashMap<Node, Node> route = new HashMap<Node, Node>();
 		List<Node> visited = new LinkedList<Node>();
@@ -53,7 +53,7 @@ public class MultiGraph implements GraphADT {
 		while (!unvisited.isEmpty()) {
 			currentStation = unvisited.remove();
 			if (currentStation.equals(destinationNode)) {
-				//destination reached, exit body of while loop
+				// destination reached, exit body of while loop
 				break;
 			} else {
 				// for each of the nodes connected to n...
@@ -75,12 +75,39 @@ public class MultiGraph implements GraphADT {
 			System.out.println("A route was not found");
 			return null;
 		} else {
-			// retrace route though hashmap, add nodes to the directions arraylist
+			// retrace route though hashmap, add nodes to the directions
+			// arraylist
 			for (Node n = destinationNode; n != null; n = route.get(n)) {
 				directionOutput.add(n);
 			}
+
+			/*
+			 * ASSERTION that all nodes contained in the output were actually
+			 * visited and haven't been added accidentally.
+			 */
+			Boolean a = true;
+			for (int i = 0; i < directionOutput.size(); i++) {
+				if (!visited.contains(directionOutput.get(i))) {
+					a = false;
+				}
+			}
+			assert a : "Route does not contain all visited nodes";
+
 			// have to reverse to put directions in chronological order
 			Collections.reverse(directionOutput);
+
+			/*
+			 * ASSERTION that the start node entered at the beginning of
+			 * findRoute exists in the list returned
+			 */
+			assert directionOutput.get(0).equals(sourceNode);
+			/*
+			 * ASSERTION that the end node entered at the beginning of findRoute
+			 * exists in the list returned
+			 */
+			assert directionOutput.get(directionOutput.size() - 1).equals(
+					destinationNode);
+
 			return directionOutput;
 		}
 	}
@@ -100,10 +127,12 @@ public class MultiGraph implements GraphADT {
 		}
 		return node;
 	}
-	/*returns a node object associated with a station name*/
+
+	/* returns a node object associated with a station name */
 	public Node getNodeFromStationName(String stationName) {
 		for (Node n : nodes) {
-			//If name associated with node match the stationName, return the node
+			// If name associated with node match the stationName, return the
+			// node
 			if (n.getNodeLabel().toLowerCase()
 					.compareTo(stationName.toLowerCase()) == 0) {
 				return n;
@@ -112,7 +141,8 @@ public class MultiGraph implements GraphADT {
 		System.out.println("Error: station not found");
 		return null;
 	}
-	/*Method determines if there is an edge connecting 2 specified nodes*/
+
+	/* Method determines if there is an edge connecting 2 specified nodes */
 	public Boolean isEdge(String firstNode, String secondNode) {
 		for (Edge e : edges) {
 			if ((e.getPreviousNodeID() == Integer.parseInt(firstNode))
@@ -123,11 +153,12 @@ public class MultiGraph implements GraphADT {
 		}
 		return false;
 	}
-	/* Returns an ArrayList of adjacent nodes 
-	 * i.e. nodes that are connected to a particular node
-	 * A node is adjacent to another node if an edge exists between them
-	 * method uses the isEdge() helper method
-	 * */
+
+	/*
+	 * Returns an ArrayList of adjacent nodes i.e. nodes that are connected to a
+	 * particular node A node is adjacent to another node if an edge exists
+	 * between them method uses the isEdge() helper method
+	 */
 	public ArrayList<Node> getAdjacentNodes(Node n) {
 		ArrayList<Node> adjacentNodes = new ArrayList<Node>();
 		for (Node n2 : nodes) {
